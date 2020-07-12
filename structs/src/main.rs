@@ -122,30 +122,29 @@ impl Rectangle {
     }
 
     fn calculate_coordinates(&self) -> (Point, Point, Point, Point) {
-        let x0 = self.upper_left.0;
-        let y0 = self.upper_left.1;
+        let x1 = self.upper_left.0;
+        let y1 = self.upper_left.1;
+        let width = self.width as i32;
+        let height = self.height as i32;
+
         let upper_left = self.upper_left.clone();
-        let lower_left = Point(x0, y0 + (self.height as i32));
-        let upper_right = Point(x0 + (self.width as i32), y0);
-        let lower_right = Point(
-            x0 + (self.width as i32),
-            y0 + (self.height as i32),
-        );
+        let lower_left = Point(x1, y1 + height);
+        let upper_right = Point(x1 + width, y1);
+        let lower_right = Point(x1 + width, y1 + height);
 
         return (upper_left, upper_right, lower_left, lower_right);
     }
 
     fn overlaps(&self, other: &Rectangle) -> bool {
+        let a_width = self.width as i32;
+        let a_height = self.height as i32;
+        let b_width = other.width as i32;
+        let b_height = other.height as i32;
+
         let (a_x1, a_y1) = (self.upper_left.0, self.upper_left.1);
-        let (a_x2, a_y2) = (
-            self.upper_left.0 + (self.width as i32),
-            self.upper_left.1 + (self.height as i32),
-        );
+        let (a_x2, a_y2) = (a_x1 + a_width, a_y1 + a_height);
         let (b_x1, b_y1) = (other.upper_left.0, other.upper_left.1);
-        let (b_x2, b_y2) = (
-            other.upper_left.0 + (other.width as i32),
-            other.upper_left.1 + (other.height as i32),
-        );
+        let (b_x2, b_y2) = (b_x1 + b_width, b_y1 + b_height);
 
         a_x1 < b_x2 && a_x2 > b_x1 && a_y1 < b_y2 && a_y2 > b_y1
     }
